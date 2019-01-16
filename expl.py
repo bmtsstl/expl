@@ -4,16 +4,13 @@ import subprocess
 
 
 class Pane(urwid.Frame):
-    def __init__(self, path=None):
+    def __init__(self, path):
         addressbar = AddressBar()
         entrylistbox = EntryListBox()
         super().__init__(entrylistbox, header=addressbar)
 
         entrylistbox.set_pane(self)
-        self.path = None
-
-        if path is not None:
-            self.browse(path)
+        self.browse(path)
 
     def browse(self, path):
         if isinstance(path, str):

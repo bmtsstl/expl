@@ -27,11 +27,7 @@ class TestCase(unittest.TestCase):
         shutil.rmtree(str(self.tmpdir))
 
     def test_pane(self):
-        pane = expl.Pane()
-        self.assertEqual(pane.path, None)
-        self.assertEqual(pane.addressbar.path, None)
-        self.assertEqual(pane.entrylistbox.path, None)
-
+        pane = expl.Pane(self.tmpdir)
         pane.browse(self.tmpdir)
         self.assertEqual(pane.path, self.tmpdir)
         self.assertEqual(pane.addressbar.path, self.tmpdir)
