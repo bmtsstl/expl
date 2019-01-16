@@ -79,21 +79,21 @@ class EntryListBox(urwid.ListBox):
 
 
 class Entry(urwid.WidgetWrap):
-    def __init__(self, path):
+    def __init__(self, path, pane=None):
         name = path.name
         if path.is_dir():
             name += '/'
         checkbox = urwid.CheckBox(name)
         super().__init__(checkbox)
 
-        self._pane = None
+        self._pane = pane
         self.path = path
 
     def set_pane(self, pane):
-        self._pane = pane
+        raise NotImplementedError()
 
     def keypress(self, size, key):
-        if key == 'enter' and self.path.is_dir() and self._pane is not None:
+        if key == 'enter' and self.path.is_dir():
             self._pane.browse(self.path)
             return
         return key
