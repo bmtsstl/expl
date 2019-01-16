@@ -26,9 +26,6 @@ class Pane(urwid.Frame):
         self.addressbar.update(self.path)
         self.entrylistbox.update(self.path)
 
-    def set_renamed_callback(self, callback):
-        raise NotImplementedError()
-
     def keypress(self, size, key):
         if super().keypress(size, key) != key:
             return
@@ -62,9 +59,6 @@ class EntryListBox(urwid.ListBox):
         self.path = path
         self.body = [Entry(p) for p in path.iterdir()]
         self._update_entry_callbacks()
-
-    def set_browse_callback(self, callback):
-        raise NotImplementedError()
 
     def set_pane(self, pane):
         self._pane = pane
