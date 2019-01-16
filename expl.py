@@ -5,21 +5,16 @@ import subprocess
 
 class Pane(urwid.Frame):
     def __init__(self, path):
-        addressbar = AddressBar()
-        entrylistbox = EntryListBox()
+        path = self._convert_path(path)
+        addressbar = AddressBar(path)
+        entrylistbox = EntryListBox(path)
         super().__init__(entrylistbox, header=addressbar)
 
-        entrylistbox.set_pane(self)
-        self.browse(path)
+        self.path = path
+        self.entrylistbox.set_pane(self)
 
     def browse(self, path):
-        if isinstance(path, str):
-            path = Path(path)
-        elif not isinstance(path, Path):
-            raise TypeError('expected {} but {} found.'.format(Path, type(path)))
-        path = path.resolve()
-
-        self.path = path
+        self.path = self._convert_path(path)
         self.addressbar.update(self.path)
         self.entrylistbox.update(self.path)
 
@@ -41,6 +36,14 @@ class Pane(urwid.Frame):
     @property
     def entrylistbox(self):
         return self.contents['body'][0]
+
+    @staticmethod
+    def _convert_path(v):
+        if isinstance(v, str):
+            v = Path(v)
+        elif not isinstance(v, Path):
+            raise TypeError('expected {} but {} found.'.format(Path, type(path)))
+        return v.resolve()
 
 
 class EntryListBox(urwid.ListBox):
