@@ -7,11 +7,9 @@ class Pane(urwid.Frame):
     def __init__(self, path):
         path = self._convert_path(path)
         addressbar = AddressBar(path)
-        entrylistbox = EntryListBox(path)
+        entrylistbox = EntryListBox(path, self)
         super().__init__(entrylistbox, header=addressbar)
-
         self.path = path
-        self.entrylistbox.set_pane(self)
 
     def browse(self, path):
         self.path = self._convert_path(path)
