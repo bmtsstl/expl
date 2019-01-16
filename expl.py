@@ -63,6 +63,7 @@ class EntryListBox(urwid.ListBox):
             return
         if key == 'v':
             clipboard.paste(self.path)
+            self.update(self.path)
             return
         return super().keypress(size, key)
 
