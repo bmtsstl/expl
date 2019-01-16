@@ -103,12 +103,9 @@ class Entry(urwid.WidgetWrap):
 
 
 class AddressBar(urwid.WidgetWrap):
-    def __init__(self, path=None):
+    def __init__(self, path):
         super().__init__(urwid.Text(''))
-        self.path = None
-
-        if path is not None:
-            self.update(path)
+        self.update(path)
 
     def update(self, path):
         self.path = path
