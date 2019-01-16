@@ -54,9 +54,6 @@ class EntryListBox(urwid.ListBox):
         self.path = path
         self.body = [Entry(p, self._pane) for p in path.iterdir()]
 
-    def set_pane(self, pane):
-        raise NotImplementedError()
-
     def keypress(self, size, key):
         if key == 'c':
             clipboard.copy([self.focus.path])
@@ -80,9 +77,6 @@ class Entry(urwid.WidgetWrap):
 
         self._pane = pane
         self.path = path
-
-    def set_pane(self, pane):
-        raise NotImplementedError()
 
     def keypress(self, size, key):
         if key == 'enter' and self.path.is_dir():
