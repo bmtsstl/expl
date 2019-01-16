@@ -7,11 +7,9 @@ class Pane(urwid.Frame):
     def __init__(self, path):
         path = self._convert_path(path)
         addressbar = AddressBar(path)
-        entrylistbox = EntryListBox(path)
+        entrylistbox = EntryListBox(path, self)
         super().__init__(entrylistbox, header=addressbar)
-
         self.path = path
-        self.entrylistbox.set_pane(self)
 
     def browse(self, path):
         self.path = self._convert_path(path)
@@ -47,19 +45,14 @@ class Pane(urwid.Frame):
 
 
 class EntryListBox(urwid.ListBox):
-    def __init__(self, path):
+    def __init__(self, path, pane):
         super().__init__([])
-        self._pane = None
+        self._pane = pane
         self.update(path)
 
     def update(self, path):
         self.path = path
-        self.body = [Entry(p) for p in path.iterdir()]
-        self._update_entry_callbacks()
-
-    def set_pane(self, pane):
-        self._pane = pane
-        self._update_entry_callbacks()
+        self.body = [Entry(p, self._pane) for p in path.iterdir()]
 
     def keypress(self, size, key):
         if key == 'c':
@@ -73,27 +66,20 @@ class EntryListBox(urwid.ListBox):
             return
         return super().keypress(size, key)
 
-    def _update_entry_callbacks(self):
-        for entry in self.body:
-            entry.set_pane(self._pane)
-
 
 class Entry(urwid.WidgetWrap):
-    def __init__(self, path):
+    def __init__(self, path, pane):
         name = path.name
         if path.is_dir():
             name += '/'
         checkbox = urwid.CheckBox(name)
         super().__init__(checkbox)
 
-        self._pane = None
+        self._pane = pane
         self.path = path
 
-    def set_pane(self, pane):
-        self._pane = pane
-
     def keypress(self, size, key):
-        if key == 'enter' and self.path.is_dir() and self._pane is not None:
+        if key == 'enter' and self.path.is_dir():
             self._pane.browse(self.path)
             return
         return key

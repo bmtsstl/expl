@@ -62,12 +62,10 @@ class TestCase(unittest.TestCase):
     def test_entrylistbox(self):
         pane = expl.Pane()
 
-        entrylistbox = expl.EntryListBox(self.tmpdir)
+        entrylistbox = expl.EntryListBox(self.tmpdir, pane)
         self.assertEqual(
             [entry.path for entry in entrylistbox.body],
             list(self.tmpdir.iterdir()))
-
-        entrylistbox.set_pane(pane)
         for entry in entrylistbox.body:
             self.assertEqual(entry._pane, pane)
 
@@ -84,19 +82,12 @@ class TestCase(unittest.TestCase):
         size = (100, 1)
 
         for path in self.tmpdir.iterdir():
-            entry = expl.Entry(path)
+            entry = expl.Entry(path, pane)
             if path.is_dir():
                 self.assertEqual(entry._w.label, path.name + '/')
             else:
                 self.assertEqual(entry._w.label, path.name)
 
-            key = entry.keypress(size, 'enter')
-            self.assertEqual(key, 'enter')
-
-            key = entry.keypress(size, 'backspace')
-            self.assertEqual(key, 'backspace')
-
-            entry.set_pane(pane)
             key = entry.keypress(size, 'enter')
             if path.is_dir():
                 self.assertEqual(key, None)
