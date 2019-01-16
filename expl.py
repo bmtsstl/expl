@@ -73,7 +73,7 @@ class EntryListBox(urwid.ListBox):
 
 
 class Entry(urwid.WidgetWrap):
-    def __init__(self, path, pane=None):
+    def __init__(self, path, pane):
         name = path.name
         if path.is_dir():
             name += '/'
