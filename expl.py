@@ -47,13 +47,10 @@ class Pane(urwid.Frame):
 
 
 class EntryListBox(urwid.ListBox):
-    def __init__(self, path=None):
+    def __init__(self, path):
         super().__init__([])
         self._pane = None
-        self.path = None
-
-        if path is not None:
-            self.update(path)
+        self.update(path)
 
     def update(self, path):
         self.path = path
