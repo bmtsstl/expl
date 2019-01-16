@@ -4,30 +4,19 @@ import subprocess
 
 
 class Pane(urwid.Frame):
-    def __init__(self, path=None):
-        addressbar = AddressBar()
-        entrylistbox = EntryListBox()
+    def __init__(self, path):
+        path = self._convert_path(path)
+        addressbar = AddressBar(path)
+        entrylistbox = EntryListBox(path)
         super().__init__(entrylistbox, header=addressbar)
 
-        entrylistbox.set_pane(self)
-        self.path = None
-
-        if path is not None:
-            self.browse(path)
+        self.path = path
+        self.entrylistbox.set_pane(self)
 
     def browse(self, path):
-        if isinstance(path, str):
-            path = Path(path)
-        elif not isinstance(path, Path):
-            raise TypeError('expected {} but {} found.'.format(Path, type(path)))
-        path = path.resolve()
-
-        self.path = path
+        self.path = self._convert_path(path)
         self.addressbar.update(self.path)
         self.entrylistbox.update(self.path)
-
-    def set_renamed_callback(self, callback):
-        raise NotImplementedError()
 
     def keypress(self, size, key):
         if super().keypress(size, key) != key:
@@ -48,23 +37,25 @@ class Pane(urwid.Frame):
     def entrylistbox(self):
         return self.contents['body'][0]
 
+    @staticmethod
+    def _convert_path(v):
+        if isinstance(v, str):
+            v = Path(v)
+        elif not isinstance(v, Path):
+            raise TypeError('expected {} but {} found.'.format(Path, type(path)))
+        return v.resolve()
+
 
 class EntryListBox(urwid.ListBox):
-    def __init__(self, path=None):
+    def __init__(self, path):
         super().__init__([])
         self._pane = None
-        self.path = None
-
-        if path is not None:
-            self.update(path)
+        self.update(path)
 
     def update(self, path):
         self.path = path
         self.body = [Entry(p) for p in path.iterdir()]
         self._update_entry_callbacks()
-
-    def set_browse_callback(self, callback):
-        raise NotImplementedError()
 
     def set_pane(self, pane):
         self._pane = pane
@@ -109,12 +100,9 @@ class Entry(urwid.WidgetWrap):
 
 
 class AddressBar(urwid.WidgetWrap):
-    def __init__(self, path=None):
+    def __init__(self, path):
         super().__init__(urwid.Text(''))
-        self.path = None
-
-        if path is not None:
-            self.update(path)
+        self.update(path)
 
     def update(self, path):
         self.path = path

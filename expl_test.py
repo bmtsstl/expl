@@ -27,11 +27,7 @@ class TestCase(unittest.TestCase):
         shutil.rmtree(str(self.tmpdir))
 
     def test_pane(self):
-        pane = expl.Pane()
-        self.assertEqual(pane.path, None)
-        self.assertEqual(pane.addressbar.path, None)
-        self.assertEqual(pane.entrylistbox.path, None)
-
+        pane = expl.Pane(self.tmpdir)
         pane.browse(self.tmpdir)
         self.assertEqual(pane.path, self.tmpdir)
         self.assertEqual(pane.addressbar.path, self.tmpdir)
@@ -65,13 +61,6 @@ class TestCase(unittest.TestCase):
     @mock.patch.object(expl, 'Pane', mock.Mock(spec_set=expl.Pane))
     def test_entrylistbox(self):
         pane = expl.Pane()
-
-        entrylistbox = expl.EntryListBox()
-        self.assertEqual(entrylistbox.path, None)
-        self.assertTrue(len(entrylistbox.body) == 0)
-
-        entrylistbox.set_pane(pane)
-        self.assertTrue(len(entrylistbox.body) == 0)
 
         entrylistbox = expl.EntryListBox(self.tmpdir)
         self.assertEqual(
