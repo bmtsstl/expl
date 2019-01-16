@@ -47,19 +47,17 @@ class Pane(urwid.Frame):
 
 
 class EntryListBox(urwid.ListBox):
-    def __init__(self, path):
+    def __init__(self, path, pane):
         super().__init__([])
-        self._pane = None
+        self._pane = pane
         self.update(path)
 
     def update(self, path):
         self.path = path
-        self.body = [Entry(p) for p in path.iterdir()]
-        self._update_entry_callbacks()
+        self.body = [Entry(p, self._pane) for p in path.iterdir()]
 
     def set_pane(self, pane):
-        self._pane = pane
-        self._update_entry_callbacks()
+        raise NotImplementedError()
 
     def keypress(self, size, key):
         if key == 'c':
@@ -72,10 +70,6 @@ class EntryListBox(urwid.ListBox):
             clipboard.paste(self.path)
             return
         return super().keypress(size, key)
-
-    def _update_entry_callbacks(self):
-        for entry in self.body:
-            entry.set_pane(self._pane)
 
 
 class Entry(urwid.WidgetWrap):

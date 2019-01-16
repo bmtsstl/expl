@@ -62,12 +62,10 @@ class TestCase(unittest.TestCase):
     def test_entrylistbox(self):
         pane = expl.Pane()
 
-        entrylistbox = expl.EntryListBox(self.tmpdir)
+        entrylistbox = expl.EntryListBox(self.tmpdir, pane)
         self.assertEqual(
             [entry.path for entry in entrylistbox.body],
             list(self.tmpdir.iterdir()))
-
-        entrylistbox.set_pane(pane)
         for entry in entrylistbox.body:
             self.assertEqual(entry._pane, pane)
 
