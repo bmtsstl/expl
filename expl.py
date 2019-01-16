@@ -40,7 +40,7 @@ class Pane(urwid.Frame):
         if isinstance(v, str):
             v = Path(v)
         elif not isinstance(v, Path):
-            raise TypeError('expected {} but {} found.'.format(Path, type(path)))
+            raise TypeError('expected {} but {} found.'.format(Path, type(v)))
         return v.resolve()
 
 
