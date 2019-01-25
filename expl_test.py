@@ -102,6 +102,13 @@ class TestCase(unittest.TestCase):
             pane.browse.assert_not_called()
             pane.reset_mock()
 
+    def test_footer(self):
+        footer = expl.Footer()
+        self.assertEqual(footer._w.text, '')
+
+        footer.echo('test')
+        self.assertEqual(footer._w.text, 'test')
+
     def test_clipboard(self):
         clipboard = expl.Clipboard()
         self.assertEqual(clipboard._src, [])

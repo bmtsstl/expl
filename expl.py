@@ -96,6 +96,14 @@ class AddressBar(urwid.WidgetWrap):
         self._w.set_text(str(path))
 
 
+class Footer(urwid.WidgetWrap):
+    def __init__(self):
+        super().__init__(urwid.Text(''))
+
+    def echo(self, msg):
+        self._w.set_text(msg)
+
+
 class Clipboard:
     def __init__(self):
         super().__init__()
