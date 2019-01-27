@@ -106,11 +106,31 @@ class TestCase(unittest.TestCase):
     def test_footer(self):
         footer = expl.Footer()
         self.assertEqual(type(footer._w_text), urwid.Text)
-        self.assertEqual(footer._w_text.text, '')
+        self.assertEqual(type(footer._w_edit), urwid.Edit)
         self.assertEqual(footer._w, footer._w_text)
 
         footer.echo('test')
         self.assertEqual(footer._w_text.text, 'test')
+
+        def callback(text):
+            nonlocal input_text
+            input_text = text
+        input_text = ''
+        footer.input('prompt', callback)
+        self.assertEqual(footer._w_edit.caption, 'prompt')
+        self.assertEqual(footer._w, footer._w_edit)
+
+        footer.echo('test2')
+        self.assertEqual(footer._w_text.text, 'test2')
+        self.assertEqual(footer._w, footer._w_edit)
+
+        size = (100,)
+        for c in 'input':
+            footer.keypress(size, c)
+        footer.keypress(size, 'enter')
+        self.assertEqual(footer._w_edit.edit_text, 'input')
+        self.assertEqual(footer._w, footer._w_text)
+        self.assertEqual(input_text, 'input')
 
     def test_clipboard(self):
         clipboard = expl.Clipboard()

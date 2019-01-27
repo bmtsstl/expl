@@ -99,10 +99,25 @@ class AddressBar(urwid.WidgetWrap):
 class Footer(urwid.WidgetWrap):
     def __init__(self):
         self._w_text = urwid.Text('')
+        self._w_edit = urwid.Edit('')
+        self._input_callback = None
         super().__init__(self._w_text)
 
     def echo(self, msg):
         self._w_text.set_text(str(msg))
+
+    def input(self, prompt, callback, text=''):
+        self._w_edit.set_caption(prompt)
+        self._w_edit.set_edit_text(text)
+        self._input_callback = callback
+        self._w = self._w_edit
+
+    def keypress(self, size, key):
+        if self._w is self._w_edit and key == 'enter':
+            self._input_callback(self._w_edit.edit_text)
+            self._w = self._w_text
+            return
+        return super().keypress(size, key)
 
 
 class Clipboard:
