@@ -9,6 +9,9 @@ class Top(urwid.Frame):
         footer = Footer()
         super().__init__(pane, footer=footer)
 
+    def echo(self, msg):
+        return self['footer'].echo(msg)
+
 
 class Pane(urwid.Frame):
     def __init__(self, path):

@@ -27,6 +27,12 @@ class TestCase(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(str(self.tmpdir))
 
+    def test_top(self):
+        top = expl.Top('.')
+
+        top.echo('test')
+        self.assertEqual(top['footer']._w.text, 'test')
+
     def test_pane(self):
         pane = expl.Pane(self.tmpdir)
         pane.browse(self.tmpdir)
