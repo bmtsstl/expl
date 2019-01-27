@@ -1,6 +1,7 @@
 import unittest
 from unittest import mock
 import expl
+import urwid
 
 from pathlib import Path
 import tempfile
@@ -104,10 +105,12 @@ class TestCase(unittest.TestCase):
 
     def test_footer(self):
         footer = expl.Footer()
-        self.assertEqual(footer._w.text, '')
+        self.assertEqual(type(footer._w_text), urwid.Text)
+        self.assertEqual(footer._w_text.text, '')
+        self.assertEqual(footer._w, footer._w_text)
 
         footer.echo('test')
-        self.assertEqual(footer._w.text, 'test')
+        self.assertEqual(footer._w_text.text, 'test')
 
     def test_clipboard(self):
         clipboard = expl.Clipboard()
