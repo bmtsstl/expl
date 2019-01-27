@@ -12,6 +12,13 @@ class Top(urwid.Frame):
     def echo(self, msg):
         return self['footer'].echo(msg)
 
+    def input(self, prompt, callback, text=''):
+        def wrapped_callback(text):
+            self.focus_position = 'body'
+            return callback(text)
+        self['footer'].input(prompt, wrapped_callback, text)
+        self.focus_position = 'footer'
+
 
 class Pane(urwid.Frame):
     def __init__(self, path):

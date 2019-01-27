@@ -33,6 +33,15 @@ class TestCase(unittest.TestCase):
         top.echo('test')
         self.assertEqual(top['footer']._w.text, 'test')
 
+        top.input('prompt', lambda text: None)
+        self.assertIs(top.focus, top['footer'])
+
+        size = (100, 100)
+        for c in 'input':
+            top.keypress(size, c)
+        top.keypress(size, 'enter')
+        self.assertIs(top.focus, top['body'])
+
     def test_pane(self):
         pane = expl.Pane(self.tmpdir)
         pane.browse(self.tmpdir)
