@@ -35,12 +35,14 @@ class TestCase(unittest.TestCase):
 
         top.input('prompt', lambda text: None)
         self.assertIs(top.focus, top['footer'])
+        self.assertIs(type(top.contents['body'][0]), urwid.WidgetDisable)
 
         size = (100, 100)
         for c in 'input':
             top.keypress(size, c)
         top.keypress(size, 'enter')
         self.assertIs(top.focus, top['body'])
+        self.assertIsNot(type(top.contents['body'][0]), urwid.WidgetDisable)
 
     def test_pane(self):
         pane = expl.Pane(self.tmpdir)

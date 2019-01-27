@@ -14,9 +14,11 @@ class Top(urwid.Frame):
 
     def input(self, prompt, callback, text=''):
         def wrapped_callback(text):
+            self.contents['body'] = (self.contents['body'][0].base_widget, self.contents['body'][1])
             self.focus_position = 'body'
             return callback(text)
         self['footer'].input(prompt, wrapped_callback, text)
+        self.contents['body'] = (urwid.WidgetDisable(self.contents['body'][0]), self.contents['body'][1])
         self.focus_position = 'footer'
 
 
