@@ -170,4 +170,7 @@ top = Top('.')
 clipboard = Clipboard()
 
 if __name__ == '__main__':
-    urwid.MainLoop(top).run()
+    try:
+        urwid.MainLoop(top).run()
+    except KeyboardInterrupt:
+        pass
