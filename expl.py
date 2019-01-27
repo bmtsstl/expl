@@ -169,8 +169,13 @@ class Clipboard:
 top = Top('.')
 clipboard = Clipboard()
 
-if __name__ == '__main__':
+
+def main():
     try:
         urwid.MainLoop(top).run()
     except KeyboardInterrupt:
         pass
+
+
+if __name__ == '__main__':
+    main()
