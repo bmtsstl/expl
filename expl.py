@@ -3,6 +3,13 @@ import urwid
 import subprocess
 
 
+class Top(urwid.Frame):
+    def __init__(self, path):
+        pane = Pane(path)
+        footer = Footer()
+        super().__init__(pane, footer=footer)
+
+
 class Pane(urwid.Frame):
     def __init__(self, path):
         path = self._convert_path(path)
@@ -147,8 +154,8 @@ class Clipboard:
         self._op = None
 
 
+top = Top('.')
 clipboard = Clipboard()
 
 if __name__ == '__main__':
-    top = Pane(Path('.'))
     urwid.MainLoop(top).run()
