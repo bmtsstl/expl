@@ -154,11 +154,9 @@ class Clipboard:
 
     def paste(self, dst):
         if self._op == 'copy':
-            cmd = ['cp', '-r', '--'] + [str(s) for s in self._src] + [str(dst)]
-            subprocess.run(cmd, check=True)
+            jobrunner.copy(self._src, dst)
         elif self._op == 'cut':
-            cmd = ['mv', '--'] + [str(s) for s in self._src] + [str(dst)]
-            subprocess.run(cmd, check=True)
+            jobrunner.move(self._src, dst)
             self.clear()
 
     def clear(self):
@@ -182,6 +180,7 @@ class JobRunner:
 
 top = Top('.')
 clipboard = Clipboard()
+jobrunner = JobRunner()
 
 
 def main():
