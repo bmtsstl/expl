@@ -12,12 +12,12 @@ class Top(urwid.Frame):
     def echo(self, msg):
         return self['footer'].echo(msg)
 
-    def input(self, prompt, callback, text=''):
+    def input(self, prompt, callback, default=''):
         def wrapped_callback(text):
             self.contents['body'] = (self.contents['body'][0].base_widget, self.contents['body'][1])
             self.focus_position = 'body'
             return callback(text)
-        self['footer'].input(prompt, wrapped_callback, text)
+        self['footer'].input(prompt, wrapped_callback, default)
         self.contents['body'] = (urwid.WidgetDisable(self.contents['body'][0]), self.contents['body'][1])
         self.focus_position = 'footer'
 
@@ -131,9 +131,9 @@ class Footer(urwid.WidgetWrap):
     def echo(self, msg):
         self._w_text.set_text(str(msg))
 
-    def input(self, prompt, callback, text=''):
+    def input(self, prompt, callback, default=''):
         self._w_edit.set_caption(prompt)
-        self._w_edit.set_edit_text(text)
+        self._w_edit.set_edit_text(default)
         self._input_callback = callback
         self._w = self._w_edit
 
