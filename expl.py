@@ -150,10 +150,12 @@ class Clipboard:
     def copy(self, src):
         self._src = list(src)
         self._op = 'copy'
+        top.echo(str(len(self._src)) + ' copied to clipboard')
 
     def cut(self, src):
         self._src = list(src)
         self._op = 'cut'
+        top.echo(str(len(self._src)) + ' cutted to clipboard')
 
     def paste(self, dst):
         if self._op == 'copy':
