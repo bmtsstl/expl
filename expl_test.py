@@ -209,6 +209,14 @@ class TestCase(unittest.TestCase):
             self.assertEqual(lsname(self.tmpdir), ls)
             self.assertEqual(lsname(dst), ls)
 
+            jobrunner.remove(lspath(dst))
+            expl.top.input.assert_called_once()
+            callback = expl.top.input.call_args[0][1]
+            expl.top.input.reset_mock()
+
+            callback('y')
+            self.assertEqual(lsname(dst), [])
+
         with tempfile.TemporaryDirectory() as dst:
             dst = Path(dst)
             jobrunner.move(lspath(self.tmpdir), dst)

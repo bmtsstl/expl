@@ -84,6 +84,9 @@ class EntryListBox(urwid.ListBox):
         if key == 'v':
             clipboard.paste(self.path)
             return
+        if key == 'd':
+            jobrunner.remove([self.focus.path])
+            return
         if key == 'r':
             self.update(self.path)
             return
@@ -181,6 +184,11 @@ class JobRunner:
         dst = str(dst)
         cmd = ['mv', '--'] + src + [dst]
         self.prompt('move?', cmd)
+
+    def remove(self, path):
+        path = [str(p) for p in path]
+        cmd = ['rm', '-r', '--'] + path
+        self.prompt('remove?', cmd)
 
     def prompt(self, text, cmd):
         def callback(input_text):
