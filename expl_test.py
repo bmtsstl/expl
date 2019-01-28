@@ -205,17 +205,27 @@ class TestCase(unittest.TestCase):
             callback = expl.top.input.call_args[0][1]
             expl.top.input.reset_mock()
 
-            callback('Y')
+            callback('y')
             self.assertEqual(lsname(self.tmpdir), ls)
             self.assertEqual(lsname(dst), ls)
 
         with tempfile.TemporaryDirectory() as dst:
             dst = Path(dst)
             jobrunner.move(lspath(self.tmpdir), dst)
+            expl.top.input.assert_called_once()
+            callback = expl.top.input.call_args[0][1]
+            expl.top.input.reset_mock()
+
+            callback('y')
             self.assertEqual(lsname(self.tmpdir), [])
             self.assertEqual(lsname(dst), ls)
 
             jobrunner.move(lspath(dst), self.tmpdir)
+            expl.top.input.assert_called_once()
+            callback = expl.top.input.call_args[0][1]
+            expl.top.input.reset_mock()
+
+            callback('y')
             self.assertEqual(lsname(self.tmpdir), ls)
             self.assertEqual(lsname(dst), [])
 

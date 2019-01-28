@@ -174,7 +174,7 @@ class JobRunner:
         src = [str(s) for s in src]
         dst = str(dst)
         cmd = ['mv', '--'] + src + [dst]
-        subprocess.run(cmd, check=True)
+        self.prompt('move', cmd)
 
     def prompt(self, text, cmd):
         def callback(input_text):
