@@ -208,7 +208,7 @@ class JobRunner:
         def callback(text):
             renamed_path = path.with_name(text)
             if renamed_path.exists():
-                top.echo(text + ' exists')
+                top.echo(text + ' already exists')
                 return
             cmd = ['mv', str(path), str(renamed_path)]
             subprocess.run(cmd, check=True)
