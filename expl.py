@@ -168,7 +168,7 @@ class JobRunner:
         src = [str(s) for s in src]
         dst = str(dst)
         cmd = ['cp', '-r', '--'] + src + [dst]
-        subprocess.run(cmd, check=True)
+        self.prompt('copy', cmd)
 
     def move(self, src, dst):
         src = [str(s) for s in src]
