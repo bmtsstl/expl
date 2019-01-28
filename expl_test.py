@@ -198,6 +198,16 @@ class TestCase(unittest.TestCase):
             self.assertEqual(lsname(self.tmpdir), srcname)
             self.assertEqual(lsname(dst), srcname)
 
+        with tempfile.TemporaryDirectory() as dst:
+            dst = Path(dst)
+            jobrunner.move(srcpath, dst)
+            self.assertEqual(lsname(self.tmpdir), [])
+            self.assertEqual(lsname(dst), srcname)
+
+            jobrunner.move(lspath(dst), self.tmpdir)
+            self.assertEqual(lsname(self.tmpdir), srcname)
+            self.assertEqual(lsname(dst), [])
+
 
 if __name__ == '__main__':
     unittest.main()
