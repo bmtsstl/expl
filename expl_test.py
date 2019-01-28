@@ -188,6 +188,9 @@ class TestCase(unittest.TestCase):
             self.assertEqual(sorted(clipboard._src), [])
             self.assertEqual(clipboard._op, None)
 
+    def test_jobrunner(self):
+        jobrunner = expl.JobRunner()
+
 
 if __name__ == '__main__':
     unittest.main()

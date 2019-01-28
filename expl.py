@@ -166,6 +166,10 @@ class Clipboard:
         self._op = None
 
 
+class JobRunner:
+    pass
+
+
 top = Top('.')
 clipboard = Clipboard()
 
