@@ -87,6 +87,9 @@ class EntryListBox(urwid.ListBox):
         if key == 'd':
             jobrunner.remove([self.focus.path])
             return
+        if key == 'r':
+            jobrunner.rename(self.focus.path)
+            return
         if key == 'f5':
             self.update(self.path)
             return
@@ -198,6 +201,19 @@ class JobRunner:
             subprocess.run(cmd, check=True)
             top.echo('done')
         top.input(text + ' (Y/n)', callback, default)
+
+    def rename(self, path):
+        path = Path(path)
+
+        def callback(text):
+            renamed_path = path.with_name(text)
+            if renamed_path.exists():
+                top.echo(text + ' exists')
+                return
+            cmd = ['mv', str(path), str(renamed_path)]
+            subprocess.run(cmd, check=True)
+            top.echo('done')
+        top.input('rename: ', callback, default=path.name)
 
 
 top = Top('.')

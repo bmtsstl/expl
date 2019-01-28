@@ -209,6 +209,14 @@ class TestCase(unittest.TestCase):
             self.assertEqual(lsname(self.tmpdir), ls)
             self.assertEqual(lsname(dst), ls)
 
+            jobrunner.rename(lspath(dst)[0])
+            expl.top.input.assert_called_once()
+            callback = expl.top.input.call_args[0][1]
+            expl.top.input.reset_mock()
+
+            callback('renamed')
+            self.assertTrue('renamed' in lsname(dst))
+
             jobrunner.remove(lspath(dst))
             expl.top.input.assert_called_once()
             callback = expl.top.input.call_args[0][1]
