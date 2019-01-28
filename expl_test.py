@@ -142,44 +142,32 @@ class TestCase(unittest.TestCase):
         self.assertIs(footer._w, footer._w_text)
         self.assertEqual(input_text, 'input')
 
+    @mock.patch.object(expl, 'jobrunner', mock.Mock(spec_set=expl.jobrunner))
     def test_clipboard(self):
         clipboard = expl.Clipboard()
         self.assertEqual(clipboard._src, [])
         self.assertEqual(clipboard._op, None)
 
-        clipboard.copy(self.tmpdir.iterdir())
-        self.assertEqual(clipboard._src, list(self.tmpdir.iterdir()))
-        self.assertEqual(clipboard._op, 'copy')
-
-        clipboard.cut(self.tmpdir.iterdir())
-        self.assertEqual(clipboard._src, list(self.tmpdir.iterdir()))
-        self.assertEqual(clipboard._op, 'cut')
-
-        def lspath(path):
-            return sorted(path.iterdir())
-
-        def lsname(path):
-            return sorted([p.name for p in path.iterdir()])
-
-        srcpath = lspath(self.tmpdir)
-        srcname = lsname(self.tmpdir)
         with tempfile.TemporaryDirectory() as dst:
-            dst = Path(dst)
-            clipboard.copy(srcpath)
-            clipboard.paste(dst)
-            self.assertEqual(lsname(self.tmpdir), srcname)
-            self.assertEqual(lsname(dst), srcname)
-            self.assertEqual(sorted(clipboard._src), srcpath)
+            clipboard.copy(self.tmpdir.iterdir())
+            self.assertEqual(clipboard._src, list(self.tmpdir.iterdir()))
             self.assertEqual(clipboard._op, 'copy')
 
-        with tempfile.TemporaryDirectory() as dst:
-            dst = Path(dst)
-            clipboard.cut(self.tmpdir.iterdir())
             clipboard.paste(dst)
-            self.assertEqual(lsname(self.tmpdir), [])
-            self.assertEqual(lsname(dst), srcname)
-            self.assertEqual(sorted(clipboard._src), [])
+            self.assertEqual(clipboard._src, list(self.tmpdir.iterdir()))
+            self.assertEqual(clipboard._op, 'copy')
+            expl.jobrunner.copy.assert_called_once_with(list(self.tmpdir.iterdir()), dst)
+            expl.jobrunner.copy.reset_mock()
+
+            clipboard.cut(self.tmpdir.iterdir())
+            self.assertEqual(clipboard._src, list(self.tmpdir.iterdir()))
+            self.assertEqual(clipboard._op, 'cut')
+
+            clipboard.paste(dst)
+            self.assertEqual(clipboard._src, [])
             self.assertEqual(clipboard._op, None)
+            expl.jobrunner.move.assert_called_once_with(list(self.tmpdir.iterdir()), dst)
+            expl.jobrunner.move.reset_mock()
 
     def test_jobrunner(self):
         jobrunner = expl.JobRunner()
