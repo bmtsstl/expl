@@ -178,22 +178,21 @@ class TestCase(unittest.TestCase):
         def lsname(path):
             return sorted([p.name for p in path.iterdir()])
 
-        srcpath = lspath(self.tmpdir)
-        srcname = lsname(self.tmpdir)
+        ls = lsname(self.tmpdir)
         with tempfile.TemporaryDirectory() as dst:
             dst = Path(dst)
-            jobrunner.copy(srcpath, dst)
-            self.assertEqual(lsname(self.tmpdir), srcname)
-            self.assertEqual(lsname(dst), srcname)
+            jobrunner.copy(lspath(self.tmpdir), dst)
+            self.assertEqual(lsname(self.tmpdir), ls)
+            self.assertEqual(lsname(dst), ls)
 
         with tempfile.TemporaryDirectory() as dst:
             dst = Path(dst)
-            jobrunner.move(srcpath, dst)
+            jobrunner.move(lspath(self.tmpdir), dst)
             self.assertEqual(lsname(self.tmpdir), [])
-            self.assertEqual(lsname(dst), srcname)
+            self.assertEqual(lsname(dst), ls)
 
             jobrunner.move(lspath(dst), self.tmpdir)
-            self.assertEqual(lsname(self.tmpdir), srcname)
+            self.assertEqual(lsname(self.tmpdir), ls)
             self.assertEqual(lsname(dst), [])
 
 
