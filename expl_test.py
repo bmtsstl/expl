@@ -159,6 +159,10 @@ class TestCase(unittest.TestCase):
             expl.jobrunner.copy.assert_called_once_with(list(self.tmpdir.iterdir()), dst)
             expl.jobrunner.copy.reset_mock()
 
+            clipboard.clear()
+            self.assertEqual(clipboard._src, [])
+            self.assertEqual(clipboard._op, None)
+
             clipboard.cut(self.tmpdir.iterdir())
             self.assertEqual(clipboard._src, list(self.tmpdir.iterdir()))
             self.assertEqual(clipboard._op, 'cut')
