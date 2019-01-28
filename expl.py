@@ -83,6 +83,9 @@ class EntryListBox(urwid.ListBox):
         if key == 'v':
             clipboard.paste(self.path)
             return
+        if key == 'r':
+            self.update(self.path)
+            return
         return super().keypress(size, key)
 
 
@@ -168,13 +171,13 @@ class JobRunner:
         src = [str(s) for s in src]
         dst = str(dst)
         cmd = ['cp', '-r', '--'] + src + [dst]
-        self.prompt('copy', cmd)
+        self.prompt('copy?', cmd)
 
     def move(self, src, dst):
         src = [str(s) for s in src]
         dst = str(dst)
         cmd = ['mv', '--'] + src + [dst]
-        self.prompt('move', cmd)
+        self.prompt('move?', cmd)
 
     def prompt(self, text, cmd):
         def callback(input_text):
