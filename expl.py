@@ -72,6 +72,7 @@ class EntryListBox(urwid.ListBox):
     def update(self, path):
         self.path = path
         self.body = [Entry(p, self._pane) for p in path.iterdir()]
+        self.body.sort(key=lambda entry: entry.path)
 
     def keypress(self, size, key):
         if key == 'c':

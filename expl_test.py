@@ -76,7 +76,7 @@ class TestCase(unittest.TestCase):
         entrylistbox = expl.EntryListBox(self.tmpdir, pane)
         self.assertEqual(
             [entry.path for entry in entrylistbox.body],
-            list(self.tmpdir.iterdir()))
+            sorted(self.tmpdir.iterdir()))
         for entry in entrylistbox.body:
             self.assertEqual(entry._pane, pane)
 
