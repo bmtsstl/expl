@@ -167,7 +167,11 @@ class Clipboard:
 
 
 class JobRunner:
-    pass
+    def copy(self, src, dst):
+        src = [str(s) for s in src]
+        dst = str(dst)
+        cmd = ['cp', '-r', '--'] + src + [dst]
+        subprocess.run(cmd, check=True)
 
 
 top = Top('.')

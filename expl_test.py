@@ -184,6 +184,20 @@ class TestCase(unittest.TestCase):
     def test_jobrunner(self):
         jobrunner = expl.JobRunner()
 
+        def lspath(path):
+            return sorted(path.iterdir())
+
+        def lsname(path):
+            return sorted([p.name for p in path.iterdir()])
+
+        srcpath = lspath(self.tmpdir)
+        srcname = lsname(self.tmpdir)
+        with tempfile.TemporaryDirectory() as dst:
+            dst = Path(dst)
+            jobrunner.copy(srcpath, dst)
+            self.assertEqual(lsname(self.tmpdir), srcname)
+            self.assertEqual(lsname(dst), srcname)
+
 
 if __name__ == '__main__':
     unittest.main()
