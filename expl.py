@@ -87,7 +87,7 @@ class EntryListBox(urwid.ListBox):
         if key == 'd':
             jobrunner.remove([self.focus.path])
             return
-        if key == 'r':
+        if key == 'f5':
             self.update(self.path)
             return
         return super().keypress(size, key)
