@@ -11,18 +11,11 @@ import shutil
 class TestCase(unittest.TestCase):
     def setUp(self):
         self.tmpdir = Path(tempfile.mkdtemp()).resolve()
-        for i in range(5):
-            fpath = self.tmpdir / str(i)
-            fpath.touch()
-        for i in range(5, 10):
-            dpath = self.tmpdir / str(i)
-            dpath.mkdir()
-            for j in range(5):
-                fpath = dpath / str(j)
-                fpath.touch()
-            for j in range(5):
-                fpath = dpath / (str(i) + str(j))
-                fpath.touch()
+        self.tmpdir.joinpath('1').touch()
+        self.tmpdir.joinpath('A').mkdir()
+        self.tmpdir.joinpath('A', 'A1').touch()
+        self.tmpdir.joinpath('B').mkdir()
+        self.tmpdir.joinpath('B', 'B1').touch()
 
     def tearDown(self):
         shutil.rmtree(str(self.tmpdir))
