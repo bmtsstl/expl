@@ -190,14 +190,14 @@ class JobRunner:
         cmd = ['rm', '-r', '--'] + path
         self.prompt('remove?', cmd)
 
-    def prompt(self, text, cmd):
+    def prompt(self, text, cmd, default=''):
         def callback(input_text):
             if input_text != 'Y' and input_text != 'y' and input_text != '':
                 top.echo('canceled')
                 return
             subprocess.run(cmd, check=True)
             top.echo('done')
-        top.input(text + ' (Y/n)', callback)
+        top.input(text + ' (Y/n)', callback, default)
 
 
 top = Top('.')
