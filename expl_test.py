@@ -217,7 +217,7 @@ class TestCase(unittest.TestCase):
             callback('renamed')
             self.assertTrue('renamed' in lsname(dst))
 
-            jobrunner.remove(lspath(dst))
+            jobrunner.delete(lspath(dst))
             expl.top.input.assert_called_once()
             callback = expl.top.input.call_args[0][1]
             expl.top.input.reset_mock()
