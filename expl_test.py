@@ -173,6 +173,7 @@ class TestCase(unittest.TestCase):
             expl.jobrunner.move.assert_called_once_with(list(self.tmpdir.iterdir()), dst)
             expl.jobrunner.move.reset_mock()
 
+    @mock.patch.object(expl, 'top', mock.Mock(spec_set=expl.top))
     def test_jobrunner(self):
         jobrunner = expl.JobRunner()
 
@@ -181,6 +182,20 @@ class TestCase(unittest.TestCase):
 
         def lsname(path):
             return sorted([p.name for p in path.iterdir()])
+
+        jobrunner.prompt('prompt', ['true'])
+        expl.top.input.assert_called_once()
+        self.assertEqual(expl.top.input.call_args[0][0], 'prompt (Y/n)')
+        callback = expl.top.input.call_args[0][1]
+        expl.top.input.reset_mock()
+
+        callback('')
+        expl.top.echo.assert_called_once_with('done')
+        expl.top.echo.reset_mock()
+
+        callback('n')
+        expl.top.echo.assert_called_once_with('canceled')
+        expl.top.echo.reset_mock()
 
         ls = lsname(self.tmpdir)
         with tempfile.TemporaryDirectory() as dst:

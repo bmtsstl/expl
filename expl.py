@@ -176,6 +176,15 @@ class JobRunner:
         cmd = ['mv', '--'] + src + [dst]
         subprocess.run(cmd, check=True)
 
+    def prompt(self, text, cmd):
+        def callback(input_text):
+            if input_text != 'Y' and input_text != 'y' and input_text != '':
+                top.echo('canceled')
+                return
+            subprocess.run(cmd, check=True)
+            top.echo('done')
+        top.input(text + ' (Y/n)', callback)
+
 
 top = Top('.')
 clipboard = Clipboard()
