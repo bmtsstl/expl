@@ -48,11 +48,6 @@ class TestCase(unittest.TestCase):
         self.assertEqual(pane.addressbar.path, self.tmpdir)
         self.assertEqual(pane.entrylistbox.path, self.tmpdir)
 
-        pane.keypress((100, 100), 'r')
-        self.assertEqual(pane.path, self.tmpdir)
-        self.assertEqual(pane.addressbar.path, self.tmpdir)
-        self.assertEqual(pane.entrylistbox.path, self.tmpdir)
-
         for path in self.tmpdir.iterdir():
             if not path.is_dir():
                 continue
