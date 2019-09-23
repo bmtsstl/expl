@@ -50,9 +50,6 @@ class Pane(urwid.Frame):
     def keypress(self, size, key):
         if super().keypress(size, key) != key:
             return
-        if key == 'r':
-            self.browse(self.path)
-            return
         if key == 'backspace':
             self.browse(self.path.parent)
             return
