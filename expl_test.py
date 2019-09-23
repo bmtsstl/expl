@@ -10,6 +10,19 @@ import urwid
 import expl
 
 
+class FuncTestCase(unittest.TestCase):
+    def test_convert_path(self):
+        nonpath = None
+        strpath = __file__
+        relpath = Path(strpath).relative_to(Path.cwd())
+        abspath = relpath.resolve()
+
+        self.assertRaises(TypeError, lambda: expl._convert_path(nonpath))
+        self.assertEqual(expl._convert_path(strpath), abspath)
+        self.assertEqual(expl._convert_path(relpath), abspath)
+        self.assertEqual(expl._convert_path(abspath), abspath)
+
+
 class PaneTestCase(unittest.TestCase):
     def test_init(self):
         with tempfile.TemporaryDirectory() as tempdir:
