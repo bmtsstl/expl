@@ -6,11 +6,7 @@ import urwid
 
 
 def _convert_path(v):
-    if isinstance(v, str):
-        v = Path(v)
-    elif not isinstance(v, Path):
-        raise TypeError('expected {} but {} found.'.format(Path, type(v)))
-    return v.resolve()
+    return Path(v).resolve()
 
 
 class Top(urwid.Frame):
