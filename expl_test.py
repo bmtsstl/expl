@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
+import shutil
+import tempfile
 import unittest
+from pathlib import Path
 from unittest import mock
-import expl
+
 import urwid
 
-from pathlib import Path
-import tempfile
-import shutil
+import expl
 
 
 class TestCase(unittest.TestCase):
@@ -157,7 +158,8 @@ class TestCase(unittest.TestCase):
             clipboard.paste(dst)
             self.assertEqual(clipboard._src, list(self.tmpdir.iterdir()))
             self.assertEqual(clipboard._op, 'copy')
-            expl.jobrunner.copy.assert_called_once_with(list(self.tmpdir.iterdir()), dst)
+            expl.jobrunner.copy.assert_called_once_with(
+                list(self.tmpdir.iterdir()), dst)
             expl.jobrunner.copy.reset_mock()
 
             clipboard.clear()
@@ -171,7 +173,8 @@ class TestCase(unittest.TestCase):
             clipboard.paste(dst)
             self.assertEqual(clipboard._src, [])
             self.assertEqual(clipboard._op, None)
-            expl.jobrunner.move.assert_called_once_with(list(self.tmpdir.iterdir()), dst)
+            expl.jobrunner.move.assert_called_once_with(
+                list(self.tmpdir.iterdir()), dst)
             expl.jobrunner.move.reset_mock()
 
     @mock.patch.object(expl, 'top', mock.Mock(spec_set=expl.top))
