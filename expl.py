@@ -5,6 +5,14 @@ from pathlib import Path
 import urwid
 
 
+def _convert_path(v):
+    if isinstance(v, str):
+        v = Path(v)
+    elif not isinstance(v, Path):
+        raise TypeError('expected {} but {} found.'.format(Path, type(v)))
+    return v.resolve()
+
+
 class Top(urwid.Frame):
     def __init__(self, path):
         pane = Pane(path)
@@ -28,14 +36,14 @@ class Top(urwid.Frame):
 
 class Pane(urwid.Frame):
     def __init__(self, path):
-        path = self._convert_path(path)
+        path = _convert_path(path)
         addressbar = AddressBar(path)
         entrylistbox = EntryListBox(path, self)
         super().__init__(entrylistbox, header=addressbar)
         self.path = path
 
     def browse(self, path):
-        self.path = self._convert_path(path)
+        self.path = _convert_path(path)
         self.addressbar.update(self.path)
         self.entrylistbox.update(self.path)
 
@@ -57,14 +65,6 @@ class Pane(urwid.Frame):
     @property
     def entrylistbox(self):
         return self.contents['body'][0]
-
-    @staticmethod
-    def _convert_path(v):
-        if isinstance(v, str):
-            v = Path(v)
-        elif not isinstance(v, Path):
-            raise TypeError('expected {} but {} found.'.format(Path, type(v)))
-        return v.resolve()
 
 
 class EntryListBox(urwid.ListBox):
