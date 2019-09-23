@@ -10,6 +10,62 @@ import urwid
 import expl
 
 
+class PaneTestCase(unittest.TestCase):
+    def test_init(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            tempdir = Path(tempdir)
+            pane = expl.Pane(tempdir)
+            self.assertEqual(pane.path, tempdir)
+            self.assertEqual(pane.addressbar.path, tempdir)
+            self.assertEqual(pane.entrylistbox.path, tempdir)
+
+    def test_browse(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            subdir = Path(tempdir, 'subdir')
+            subdir.mkdir()
+
+            pane = expl.Pane(tempdir)
+            pane.browse(subdir)
+            self.assertEqual(pane.path, subdir)
+            self.assertEqual(pane.addressbar.path, subdir)
+            self.assertEqual(pane.entrylistbox.path, subdir)
+
+    def test_keypress_enter(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            tempdir = Path(tempdir)
+            pane = expl.Pane(tempdir)
+            key = pane.keypress((100, 100), 'enter')
+            self.assertEqual(key, 'enter')
+            self.assertEqual(pane.path, tempdir)
+
+            Path(tempdir, 'dummy').touch()
+            pane.browse(tempdir)
+            key = pane.keypress((100, 100), 'enter')
+            self.assertEqual(key, 'enter')
+            self.assertEqual(pane.path, tempdir)
+
+        with tempfile.TemporaryDirectory() as tempdir:
+            tempdir = Path(tempdir)
+            subdir = Path(tempdir, 'subdir')
+            subdir.mkdir()
+
+            pane = expl.Pane(tempdir)
+            key = pane.keypress((100, 100), 'enter')
+            self.assertEqual(key, None)
+            self.assertEqual(pane.path, subdir)
+
+    def test_keypress_backspace(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            tempdir = Path(tempdir)
+            subdir = Path(tempdir, 'subdir')
+            subdir.mkdir()
+
+            pane = expl.Pane(subdir)
+            key = pane.keypress((100, 100), 'backspace')
+            self.assertEqual(key, None)
+            self.assertEqual(pane.path, tempdir)
+
+
 class TestCase(unittest.TestCase):
     def setUp(self):
         self.tmpdir = Path(tempfile.mkdtemp()).resolve()
@@ -40,33 +96,6 @@ class TestCase(unittest.TestCase):
         top.keypress(size, 'enter')
         self.assertIs(top.focus, top['body'])
         self.assertIsNot(type(top.contents['body'][0]), urwid.WidgetDisable)
-
-    def test_pane(self):
-        pane = expl.Pane(self.tmpdir)
-        pane.browse(self.tmpdir)
-        self.assertEqual(pane.path, self.tmpdir)
-        self.assertEqual(pane.addressbar.path, self.tmpdir)
-        self.assertEqual(pane.entrylistbox.path, self.tmpdir)
-
-        for path in self.tmpdir.iterdir():
-            if not path.is_dir():
-                continue
-
-            pane.browse(path)
-            self.assertEqual(pane.path, path)
-            self.assertEqual(pane.addressbar.path, path)
-            self.assertEqual(pane.entrylistbox.path, path)
-
-            pane.browse(path / '..')
-            self.assertEqual(pane.path, self.tmpdir)
-            self.assertEqual(pane.addressbar.path, self.tmpdir)
-            self.assertEqual(pane.entrylistbox.path, self.tmpdir)
-
-            pane.browse(path)
-            pane.keypress((100, 100), 'backspace')
-            self.assertEqual(pane.path, self.tmpdir)
-            self.assertEqual(pane.addressbar.path, self.tmpdir)
-            self.assertEqual(pane.entrylistbox.path, self.tmpdir)
 
     @mock.patch.object(expl, 'Pane', mock.Mock(spec_set=expl.Pane))
     def test_entrylistbox(self):
