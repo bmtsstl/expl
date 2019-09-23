@@ -46,6 +46,11 @@ class Pane(urwid.Frame):
     def keypress(self, size, key):
         if super().keypress(size, key) != key:
             return
+        if key == 'enter' and isinstance(self.focus, EntryListBox):
+            focused_path = self.focus.focused_path()
+            if focused_path is not None and focused_path.is_dir():
+                self.browse(self.focus.focused_path())
+                return
         if key == 'backspace':
             self.browse(self.path.parent)
             return
