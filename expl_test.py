@@ -15,9 +15,11 @@ class TestCase(unittest.TestCase):
         self.tmpdir = Path(tempfile.mkdtemp()).resolve()
         self.tmpdir.joinpath('1').touch()
         self.tmpdir.joinpath('A').mkdir()
-        self.tmpdir.joinpath('A', 'A1').touch()
         self.tmpdir.joinpath('B').mkdir()
         self.tmpdir.joinpath('B', 'B1').touch()
+        self.tmpdir.joinpath('C').mkdir()
+        self.tmpdir.joinpath('C', 'C1').touch()
+        self.tmpdir.joinpath('C', 'C2').touch()
 
     def tearDown(self):
         shutil.rmtree(str(self.tmpdir))
