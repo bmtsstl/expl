@@ -78,6 +78,11 @@ class EntryListBox(urwid.ListBox):
         self.body = [Entry(p, self._pane) for p in path.iterdir()]
         self.body.sort(key=lambda entry: entry.path)
 
+    def focused_path(self):
+        if isinstance(self.focus, Entry):
+            return self.focus.path
+        return None
+
     def keypress(self, size, key):
         if key == 'c':
             clipboard.copy([self.focus.path])

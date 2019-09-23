@@ -78,18 +78,25 @@ class TestCase(unittest.TestCase):
         pane = expl.Pane()
 
         entrylistbox = expl.EntryListBox(self.tmpdir, pane)
-        self.assertEqual(
-            [entry.path for entry in entrylistbox.body],
-            sorted(self.tmpdir.iterdir()))
+        paths = sorted(self.tmpdir.iterdir())
+        focused_path = paths[0] if len(paths) > 0 else None
+        self.assertEqual([entry.path for entry in entrylistbox.body], paths)
         for entry in entrylistbox.body:
             self.assertEqual(entry._pane, pane)
+        self.assertEqual(entrylistbox.focused_path(), focused_path)
 
         for path in self.tmpdir.iterdir():
             if not path.is_dir():
                 continue
+            paths = sorted(path.iterdir())
+            focused_path = paths[0] if len(paths) > 0 else None
+
             entrylistbox.update(path)
+            self.assertEqual(
+                [entry.path for entry in entrylistbox.body], paths)
             for entry in entrylistbox.body:
                 self.assertEqual(entry._pane, pane)
+            self.assertEqual(entrylistbox.focused_path(), focused_path)
 
     @mock.patch.object(expl, 'Pane', mock.Mock(spec_set=expl.Pane))
     def test_entry(self):
