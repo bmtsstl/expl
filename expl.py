@@ -5,10 +5,6 @@ from pathlib import Path
 import urwid
 
 
-def _convert_path(v):
-    return Path(v).resolve()
-
-
 class Top(urwid.Frame):
     def __init__(self, path):
         pane = Pane(path)
@@ -32,14 +28,14 @@ class Top(urwid.Frame):
 
 class Pane(urwid.Frame):
     def __init__(self, path):
-        path = _convert_path(path)
+        path = Path(path).resolve()
         addressbar = AddressBar(path)
         entrylistbox = EntryListBox(path, self)
         super().__init__(entrylistbox, header=addressbar)
         self.path = path
 
     def browse(self, path):
-        self.path = _convert_path(path)
+        self.path = Path(path).resolve()
         self.addressbar.update(self.path)
         self.entrylistbox.update(self.path)
 
