@@ -125,28 +125,12 @@ class TestCase(unittest.TestCase):
     @mock.patch.object(expl, 'Pane', mock.Mock(spec_set=expl.Pane))
     def test_entry(self):
         pane = expl.Pane()
-        size = (100, 1)
-
         for path in self.tmpdir.iterdir():
             entry = expl.Entry(path, pane)
             if path.is_dir():
                 self.assertEqual(entry._w.label, path.name + '/')
             else:
                 self.assertEqual(entry._w.label, path.name)
-
-            key = entry.keypress(size, 'enter')
-            if path.is_dir():
-                self.assertEqual(key, None)
-                pane.browse.assert_called_with(path)
-            else:
-                self.assertEqual(key, 'enter')
-                pane.browse.assert_not_called()
-            pane.reset_mock()
-
-            key = entry.keypress(size, 'backspace')
-            self.assertEqual(key, 'backspace')
-            pane.browse.assert_not_called()
-            pane.reset_mock()
 
     def test_footer(self):
         footer = expl.Footer()

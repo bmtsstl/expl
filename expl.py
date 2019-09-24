@@ -110,12 +110,6 @@ class Entry(urwid.WidgetWrap):
         self._pane = pane
         self.path = path
 
-    def keypress(self, size, key):
-        if key == 'enter' and self.path.is_dir():
-            self._pane.browse(self.path)
-            return
-        return key
-
 
 class AddressBar(urwid.WidgetWrap):
     def __init__(self, path):
