@@ -118,9 +118,8 @@ class TestCase(unittest.TestCase):
 
     @mock.patch.object(expl, 'Pane', mock.Mock(spec_set=expl.Pane))
     def test_entry(self):
-        pane = expl.Pane()
         for path in self.tmpdir.iterdir():
-            entry = expl.Entry(path, pane)
+            entry = expl.Entry(path)
             if path.is_dir():
                 self.assertEqual(entry._w.label, path.name + '/')
             else:

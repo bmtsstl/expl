@@ -69,7 +69,7 @@ class EntryListBox(urwid.ListBox):
 
     def update(self, path):
         self.path = path
-        self.body = [Entry(p, self._pane) for p in path.iterdir()]
+        self.body = [Entry(p) for p in path.iterdir()]
         self.body.sort(key=lambda entry: entry.path)
 
     def focused_path(self):
@@ -100,7 +100,7 @@ class EntryListBox(urwid.ListBox):
 
 
 class Entry(urwid.WidgetWrap):
-    def __init__(self, path, pane):
+    def __init__(self, path):
         name = path.name
         if path.is_dir():
             name += '/'
