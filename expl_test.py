@@ -34,14 +34,12 @@ class PaneTestCase(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tempdir:
             tempdir = Path(tempdir)
             pane = expl.Pane(tempdir)
-            key = pane.keypress((100, 100), 'enter')
-            self.assertEqual(key, 'enter')
+            pane.keypress((100, 100), 'enter')
             self.assertEqual(pane.path, tempdir)
 
             Path(tempdir, 'dummy').touch()
             pane.browse(tempdir)
-            key = pane.keypress((100, 100), 'enter')
-            self.assertEqual(key, 'enter')
+            pane.keypress((100, 100), 'enter')
             self.assertEqual(pane.path, tempdir)
 
         with tempfile.TemporaryDirectory() as tempdir:
