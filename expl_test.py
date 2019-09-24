@@ -64,6 +64,23 @@ class PaneTestCase(unittest.TestCase):
             self.assertEqual(pane.path, tempdir)
 
 
+class ExplTestCase(unittest.TestCase):
+    def test_init(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            tempdir = Path(tempdir).resolve()
+            dummyfile = Path(tempdir, 'file')
+            dummyfile.touch()
+            subdir = Path(tempdir, 'dir')
+            subdir.mkdir()
+
+            entry = expl.Entry(dummyfile)
+            self.assertEqual(entry.path, dummyfile)
+            self.assertEqual(entry._w.label, 'file')
+            entry = expl.Entry(subdir)
+            self.assertEqual(entry.path, subdir)
+            self.assertEqual(entry._w.label, 'dir/')
+
+
 class TestCase(unittest.TestCase):
     def setUp(self):
         self.tmpdir = Path(tempfile.mkdtemp()).resolve()
@@ -115,15 +132,6 @@ class TestCase(unittest.TestCase):
             self.assertEqual(
                 [entry.path for entry in entrylistbox.body], paths)
             self.assertEqual(entrylistbox.focused_path(), focused_path)
-
-    @mock.patch.object(expl, 'Pane', mock.Mock(spec_set=expl.Pane))
-    def test_entry(self):
-        for path in self.tmpdir.iterdir():
-            entry = expl.Entry(path)
-            if path.is_dir():
-                self.assertEqual(entry._w.label, path.name + '/')
-            else:
-                self.assertEqual(entry._w.label, path.name)
 
     def test_footer(self):
         footer = expl.Footer()
