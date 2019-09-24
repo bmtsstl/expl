@@ -103,8 +103,6 @@ class TestCase(unittest.TestCase):
         paths = sorted(self.tmpdir.iterdir())
         focused_path = paths[0] if len(paths) > 0 else None
         self.assertEqual([entry.path for entry in entrylistbox.body], paths)
-        for entry in entrylistbox.body:
-            self.assertEqual(entry._pane, pane)
         self.assertEqual(entrylistbox.focused_path(), focused_path)
 
         for path in self.tmpdir.iterdir():
@@ -116,8 +114,6 @@ class TestCase(unittest.TestCase):
             entrylistbox.update(path)
             self.assertEqual(
                 [entry.path for entry in entrylistbox.body], paths)
-            for entry in entrylistbox.body:
-                self.assertEqual(entry._pane, pane)
             self.assertEqual(entrylistbox.focused_path(), focused_path)
 
     @mock.patch.object(expl, 'Pane', mock.Mock(spec_set=expl.Pane))

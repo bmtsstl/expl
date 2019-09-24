@@ -106,8 +106,6 @@ class Entry(urwid.WidgetWrap):
             name += '/'
         checkbox = urwid.CheckBox(name)
         super().__init__(checkbox)
-
-        self._pane = pane
         self.path = path
 
 
