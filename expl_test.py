@@ -112,11 +112,8 @@ class TestCase(unittest.TestCase):
         self.assertIs(top.focus, top['body'])
         self.assertIsNot(type(top.contents['body'][0]), urwid.WidgetDisable)
 
-    @mock.patch.object(expl, 'Pane', mock.Mock(spec_set=expl.Pane))
     def test_entrylistbox(self):
-        pane = expl.Pane()
-
-        entrylistbox = expl.EntryListBox(self.tmpdir, pane)
+        entrylistbox = expl.EntryListBox(self.tmpdir)
         paths = sorted(self.tmpdir.iterdir())
         focused_path = paths[0] if len(paths) > 0 else None
         self.assertEqual([entry.path for entry in entrylistbox.body], paths)

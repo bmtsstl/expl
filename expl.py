@@ -30,7 +30,7 @@ class Pane(urwid.Frame):
     def __init__(self, path):
         path = Path(path).resolve()
         addressbar = AddressBar(path)
-        entrylistbox = EntryListBox(path, self)
+        entrylistbox = EntryListBox(path)
         super().__init__(entrylistbox, header=addressbar)
         self.path = path
 
@@ -62,9 +62,8 @@ class Pane(urwid.Frame):
 
 
 class EntryListBox(urwid.ListBox):
-    def __init__(self, path, pane):
+    def __init__(self, path):
         super().__init__([])
-        self._pane = pane
         self.update(path)
 
     def update(self, path):
