@@ -64,7 +64,7 @@ class PaneTestCase(unittest.TestCase):
             self.assertEqual(pane.path, tempdir)
 
 
-class ExplTestCase(unittest.TestCase):
+class EntryTestCase(unittest.TestCase):
     def test_init(self):
         with tempfile.TemporaryDirectory() as tempdir:
             tempdir = Path(tempdir).resolve()
