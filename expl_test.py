@@ -13,7 +13,7 @@ import expl
 class PaneTestCase(unittest.TestCase):
     def test_init(self):
         with tempfile.TemporaryDirectory() as tempdir:
-            tempdir = Path(tempdir)
+            tempdir = Path(tempdir).resolve()
             pane = expl.Pane(tempdir)
             self.assertEqual(pane.path, tempdir)
             self.assertEqual(pane.addressbar.path, tempdir)
@@ -21,7 +21,7 @@ class PaneTestCase(unittest.TestCase):
 
     def test_browse(self):
         with tempfile.TemporaryDirectory() as tempdir:
-            subdir = Path(tempdir, 'subdir')
+            subdir = Path(tempdir, 'subdir').resolve()
             subdir.mkdir()
 
             pane = expl.Pane(tempdir)
@@ -32,7 +32,7 @@ class PaneTestCase(unittest.TestCase):
 
     def test_keypress_enter(self):
         with tempfile.TemporaryDirectory() as tempdir:
-            tempdir = Path(tempdir)
+            tempdir = Path(tempdir).resolve()
             pane = expl.Pane(tempdir)
             pane.keypress((100, 100), 'enter')
             self.assertEqual(pane.path, tempdir)
@@ -43,7 +43,7 @@ class PaneTestCase(unittest.TestCase):
             self.assertEqual(pane.path, tempdir)
 
         with tempfile.TemporaryDirectory() as tempdir:
-            tempdir = Path(tempdir)
+            tempdir = Path(tempdir).resolve()
             subdir = Path(tempdir, 'subdir')
             subdir.mkdir()
 
@@ -54,7 +54,7 @@ class PaneTestCase(unittest.TestCase):
 
     def test_keypress_backspace(self):
         with tempfile.TemporaryDirectory() as tempdir:
-            tempdir = Path(tempdir)
+            tempdir = Path(tempdir).resolve()
             subdir = Path(tempdir, 'subdir')
             subdir.mkdir()
 
