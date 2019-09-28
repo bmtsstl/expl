@@ -10,6 +10,29 @@ import urwid
 import expl
 
 
+class TopTestCase(unittest.TestCase):
+    def test_init(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            tempdir = Path(tempdir).resolve()
+            top = expl.Top(tempdir)
+            self.assertEqual(top.contents['body'][0], top._pane)
+            self.assertEqual(top.contents['footer'][0], top._footer)
+            self.assertEqual(top._pane.path, tempdir)
+
+    def test_input(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            top = expl.Top(tempdir)
+            self.assertIsNot(
+                type(top.contents['body'][0]), urwid.WidgetDisable)
+            top.input('prompt', lambda *args, **kwargs: None)
+            self.assertIs(top.focus, top.contents['footer'][0])
+            self.assertIs(
+                type(top.contents['body'][0]), urwid.WidgetDisable)
+            top.keypress((100, 100), 'enter')
+            self.assertIsNot(
+                type(top.contents['body'][0]), urwid.WidgetDisable)
+
+
 class PaneTestCase(unittest.TestCase):
     def test_init(self):
         with tempfile.TemporaryDirectory() as tempdir:
@@ -94,23 +117,6 @@ class TestCase(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(str(self.tmpdir))
-
-    def test_top(self):
-        top = expl.Top('.')
-
-        top.echo('test')
-        self.assertEqual(top['footer']._w.text, 'test')
-
-        top.input('prompt', lambda text: None)
-        self.assertIs(top.focus, top['footer'])
-        self.assertIs(type(top.contents['body'][0]), urwid.WidgetDisable)
-
-        size = (100, 100)
-        for c in 'input':
-            top.keypress(size, c)
-        top.keypress(size, 'enter')
-        self.assertIs(top.focus, top['body'])
-        self.assertIsNot(type(top.contents['body'][0]), urwid.WidgetDisable)
 
     def test_entrylistbox(self):
         entrylistbox = expl.EntryListBox(self.tmpdir)
