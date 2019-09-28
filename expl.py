@@ -14,7 +14,7 @@ class Top(urwid.Frame):
         self._footer = footer
 
     def echo(self, msg):
-        return self['footer'].echo(msg)
+        return self.footer.echo(msg)
 
     def input(self, prompt, callback, default=''):
         def wrapped_callback(text):
