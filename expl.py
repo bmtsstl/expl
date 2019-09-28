@@ -10,20 +10,21 @@ class Top(urwid.Frame):
         pane = Pane(path)
         footer = Footer()
         super().__init__(pane, footer=footer)
-        self._pane = pane
-        self._footer = footer
+        self._expl_pane = pane
+        self._expl_footer = footer
 
     def echo(self, msg):
-        return self.footer.echo(msg)
+        return self._expl_footer.echo(msg)
 
     def input(self, prompt, callback, default=''):
         def wrapped_callback(*args, **kwargs):
-            self.contents['body'] = (self._pane, *self.contents['body'][1:])
+            self.contents['body'] = (
+                self._expl_pane, *self.contents['body'][1:])
             self.focus_position = 'body'
             return callback(*args, **kwargs)
-        self.footer.input(prompt, wrapped_callback, default=default)
+        self._expl_footer.input(prompt, wrapped_callback, default=default)
         self.contents['body'] = (
-            urwid.WidgetDisable(self._pane),
+            urwid.WidgetDisable(self._expl_pane),
             *self.contents['body'][1:]
         )
         self.focus_position = 'footer'

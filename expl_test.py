@@ -15,9 +15,9 @@ class TopTestCase(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tempdir:
             tempdir = Path(tempdir).resolve()
             top = expl.Top(tempdir)
-            self.assertEqual(top.contents['body'][0], top._pane)
+            self.assertEqual(top.contents['body'][0], top._expl_pane)
             self.assertEqual(top.contents['footer'][0], top._footer)
-            self.assertEqual(top._pane.path, tempdir)
+            self.assertEqual(top._expl_pane.path, tempdir)
 
     def test_input(self):
         with tempfile.TemporaryDirectory() as tempdir:
