@@ -17,10 +17,10 @@ class Top(urwid.Frame):
         return self.footer.echo(msg)
 
     def input(self, prompt, callback, default=''):
-        def wrapped_callback(text):
+        def wrapped_callback(*args, **kwargs):
             self.contents['body'] = (self._pane, *self.contents['body'][1:])
             self.focus_position = 'body'
-            return callback(text)
+            return callback(*args, **kwargs)
         self.footer.input(prompt, wrapped_callback, default=default)
         self.contents['body'] = (
             urwid.WidgetDisable(self._pane),
